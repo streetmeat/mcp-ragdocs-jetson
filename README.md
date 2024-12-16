@@ -10,19 +10,48 @@ An MCP server implementation that provides tools for retrieving and processing d
 - Automated documentation processing
 - Real-time context augmentation for LLMs
 
-## Tool
+## Tools
 
-### rag_docs
-
-Enables semantic search and retrieval of documentation to enhance AI responses.
+### add_documentation
+Add documentation from a URL to the RAG database.
 
 **Inputs:**
+- `url` (string): URL of the documentation to fetch
 
-- `query` (string): The search query for finding relevant documentation
-- `maxResults` (integer): Maximum number of results to return
-- `threshold` (float): Similarity threshold for results
-- `context` (string, optional): Additional context to refine the search
-- `format` (string, optional): Desired format of the results
+### search_documentation
+Search through stored documentation.
+
+**Inputs:**
+- `query` (string): Search query
+- `limit` (number, optional): Maximum number of results to return (default: 5)
+
+### list_sources
+List all documentation sources currently stored.
+
+### extract_urls
+Extract all URLs from a given web page.
+
+**Inputs:**
+- `url` (string): URL of the page to extract URLs from
+- `add_to_queue` (boolean, optional): If true, automatically add extracted URLs to the queue
+
+### queue_documentation
+Add URLs to the documentation processing queue.
+
+**Inputs:**
+- `urls` (string[]): Array of URLs to add to the queue
+
+### list_queue
+List all URLs currently in the documentation processing queue.
+
+### run_queue
+Process URLs from the queue one at a time until complete.
+
+### remove_documentation
+Remove documentation sources by URLs.
+
+**Inputs:**
+- `urls` (string[]): Array of URLs to remove from the database
 
 ## Usage
 
@@ -48,11 +77,21 @@ Add this to your `claude_desktop_config.json`:
       "args": [
         "-y",
         "@hannesrudolph/mcp-ragdocs"
-      ]
+      ],
+      "env": {
+        "OPENAI_API_KEY": "",
+        "QDRANT_URL": "",
+        "QDRANT_API_KEY": ""
+      }
     }
   }
 }
 ```
+
+You'll need to provide values for the following environment variables:
+- `OPENAI_API_KEY`: Your OpenAI API key for embeddings generation
+- `QDRANT_URL`: URL of your Qdrant vector database instance
+- `QDRANT_API_KEY`: API key for authenticating with Qdrant
 
 ## License
 
