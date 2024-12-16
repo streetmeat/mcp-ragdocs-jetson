@@ -1,4 +1,4 @@
-import { ToolDefinition, McpToolResponse } from '../types';
+import { ToolDefinition, McpToolResponse } from '../types.js';
 
 export abstract class BaseTool {
   abstract get definition(): ToolDefinition;

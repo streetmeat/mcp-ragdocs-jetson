@@ -1,6 +1,6 @@
-import { BaseTool } from './base-tool';
-import { ToolDefinition, McpToolResponse } from '../types';
-import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types';
+import { BaseTool } from './base-tool.js';
+import { ToolDefinition, McpToolResponse } from '../types.js';
+import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types.js';
 import fs from 'fs/promises';
 import path from 'path';
 

@@ -1,7 +1,7 @@
-import { BaseTool } from './base-tool';
-import { ToolDefinition, McpToolResponse, isDocumentPayload } from '../types';
-import { ApiClient } from '../api-client';
-import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types';
+import { BaseTool } from './base-tool.js';
+import { ToolDefinition, McpToolResponse, isDocumentPayload } from '../types.js';
+import { ApiClient } from '../api-client.js';
+import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types.js';
 
 const COLLECTION_NAME = 'documentation';
 
@@ -29,7 +29,7 @@ export class ListSourcesTool extends BaseTool {
     try {
       // Use pagination for better performance with large datasets
       const pageSize = 100;
-      let offset = null;
+      let offset: string | null = null;
       const sources = new Set<string>();
       
       while (true) {
@@ -49,7 +49,7 @@ export class ListSourcesTool extends BaseTool {
         }
 
         if (scroll.points.length < pageSize) break;
-        offset = scroll.points[scroll.points.length - 1].id;
+        offset = scroll.points[scroll.points.length - 1].id as string;
       }
 
       return {

@@ -1,7 +1,7 @@
-import { BaseTool } from './base-tool';
-import { ToolDefinition, McpToolResponse } from '../types';
-import { ApiClient } from '../api-client';
-import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types';
+import { BaseTool } from './base-tool.js';
+import { ToolDefinition, McpToolResponse } from '../types.js';
+import { ApiClient } from '../api-client.js';
+import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types.js';
 import * as cheerio from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';

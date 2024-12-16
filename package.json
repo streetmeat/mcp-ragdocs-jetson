@@ -1,11 +1,11 @@
 {
-  "name": "@qpd-v/mcp-server-ragdocs",
-  "version": "0.1.4",
+  "name": "@hrudolph/mcp-ragdocs",
+  "version": "1.0.1",
   "description": "A Model Context Protocol server for fetching and storing documentation in a vector database, enabling semantic search and retrieval to augment LLM capabilities with relevant documentation context.",
   "private": false,
   "type": "module",
   "bin": {
-    "@qpd-v/mcp-server-ragdocs": "./build/index.js"
+    "@hrudolph/mcp-ragdocs": "./build/index.js"
   },
   "files": [
     "build",
@@ -29,16 +29,16 @@
     "claude",
     "llm"
   ],
-  "author": "qpd-v",
+  "author": "hrudolph",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qpd-v/mcp-server-ragdocs.git"
+    "url": "git+https://github.com/hannesrudolph/mcp-ragdocs.git"
   },
   "bugs": {
-    "url": "https://github.com/qpd-v/mcp-server-ragdocs/issues"
+    "url": "https://github.com/hannesrudolph/mcp-ragdocs/issues"
   },
-  "homepage": "https://github.com/qpd-v/mcp-server-ragdocs#readme",
+  "homepage": "https://github.com/hannesrudolph/mcp-ragdocs#readme",
   "dependencies": {
     "@azure/openai": "^2.0.0",
     "@modelcontextprotocol/sdk": "^1.0.3",

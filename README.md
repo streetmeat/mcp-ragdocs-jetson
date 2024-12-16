@@ -1,169 +1,63 @@
-# mcp-server-ragdocs
+# RAG Documentation MCP Server
 
-A Model Context Protocol (MCP) server that enables semantic search and retrieval of documentation using a vector database (Qdrant). This server allows you to add documentation from URLs or local files and then search through them using natural language queries.
-
-## Version
-
-Current version: 0.1.4
+An MCP server implementation that provides tools for retrieving and processing documentation through vector search, enabling AI assistants to augment their responses with relevant documentation context.
 
 ## Features
 
-- Add documentation from URLs or local files
-- Store documentation in a vector database for semantic search
-- Search through documentation using natural language
-- List all documentation sources
+- Vector-based documentation search and retrieval
+- Support for multiple documentation sources
+- Semantic search capabilities
+- Automated documentation processing
+- Real-time context augmentation for LLMs
 
-## Installation
+## Tool
 
-You can use this server directly with `npx`:
+### rag_docs
 
-```bash
-npx -y @qpd-v/mcp-server-ragdocs
-```
+Enables semantic search and retrieval of documentation to enhance AI responses.
 
-Or install it globally:
+**Inputs:**
 
-```bash
-npm install -g @qpd-v/mcp-server-ragdocs
-```
+- `query` (string): The search query for finding relevant documentation
+- `maxResults` (integer): Maximum number of results to return
+- `threshold` (float): Similarity threshold for results
+- `context` (string, optional): Additional context to refine the search
+- `format` (string, optional): Desired format of the results
 
-## Requirements
+## Usage
 
-- Node.js 16 or higher
-- Qdrant (either local or cloud)
-- Ollama running locally for embeddings
+The RAG Documentation tool is designed for:
 
-## Qdrant Setup Options
-
-### Option 1: Local Qdrant
-
-1. Using Docker (recommended):
-```bash
-docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant
-```
-
-2. Or download from [Qdrant's website](https://qdrant.tech/documentation/quick-start/)
-
-### Option 2: Qdrant Cloud
-
-1. Create an account at [Qdrant Cloud](https://cloud.qdrant.io/)
-2. Create a new cluster
-3. Get your cluster URL and API key from the dashboard
-4. Use these in your configuration (see Configuration section below)
+- Enhancing AI responses with relevant documentation
+- Building documentation-aware AI assistants
+- Creating context-aware tooling for developers
+- Implementing semantic documentation search
+- Augmenting existing knowledge bases
 
 ## Configuration
 
-### Claude Desktop
+### Usage with Claude Desktop
 
-Add this to your Claude Desktop configuration file:
+Add this to your `claude_desktop_config.json`:
 
-Windows: `%AppData%\Claude\claude_desktop_config.json`
-macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-
-For Local Qdrant:
 ```json
 {
   "mcpServers": {
-    "ragdocs": {
+    "rag-docs": {
       "command": "npx",
-      "args": ["-y", "@qpd-v/mcp-server-ragdocs"],
-      "env": {
-        "OLLAMA_URL": "http://localhost:11434",
-        "QDRANT_URL": "http://localhost:6333"
-      }
+      "args": [
+        "-y",
+        "@hannesrudolph/mcp-ragdocs"
+      ]
     }
   }
 }
-```
-
-For Qdrant Cloud:
-```json
-{
-  "mcpServers": {
-    "ragdocs": {
-      "command": "npx",
-      "args": ["-y", "@qpd-v/mcp-server-ragdocs"],
-      "env": {
-        "OLLAMA_URL": "http://localhost:11434",
-        "QDRANT_URL": "https://your-cluster-url.qdrant.tech",
-        "QDRANT_API_KEY": "your-api-key"
-      }
-    }
-  }
-}
-```
-
-### Environment Variables
-
-- `OLLAMA_URL` (optional): URL of your Ollama instance (defaults to http://localhost:11434)
-- `QDRANT_URL` (required): URL of your Qdrant instance
-  - For local: http://localhost:6333
-  - For cloud: https://your-cluster-url.qdrant.tech
-- `QDRANT_API_KEY` (required for cloud): Your Qdrant Cloud API key
-
-## Available Tools
-
-1. `add_documentation`
-   - Add documentation from a URL to the RAG database
-   - Parameters:
-     - `url`: URL of the documentation to fetch
-
-2. `search_documentation`
-   - Search through stored documentation
-   - Parameters:
-     - `query`: Search query
-     - `limit` (optional): Maximum number of results to return (default: 5)
-
-3. `list_sources`
-   - List all documentation sources currently stored
-   - No parameters required
-
-## Example Usage
-
-In Claude Desktop or any other MCP-compatible client:
-
-1. Add documentation:
-```
-Add this documentation: https://docs.example.com/api
-```
-
-2. Search documentation:
-```
-Search the documentation for information about authentication
-```
-
-3. List sources:
-```
-What documentation sources are available?
-```
-
-## Development
-
-1. Clone the repository:
-```bash
-git clone https://github.com/qpd-v/mcp-server-ragdocs.git
-cd mcp-server-ragdocs
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Build the project:
-```bash
-npm run build
-```
-
-4. Run locally:
-```bash
-npm start
 ```
 
 ## License
 
-MIT
+This MCP server is licensed under the MIT License. This means you are free to use, modify, and distribute the software, subject to the terms and conditions of the MIT License. For more details, please see the LICENSE file in the project repository.
 
-## Contributing
+## Acknowledgments
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+This project is a fork of [qpd-v/mcp-ragdocs](https://github.com/qpd-v/mcp-ragdocs), originally developed by qpd-v. The original project provided the foundation for this implementation.
