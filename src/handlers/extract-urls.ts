@@ -12,11 +12,6 @@ const __dirname = path.dirname(__filename);
 const QUEUE_FILE = path.join(__dirname, '..', '..', 'queue.txt');
 
 export class ExtractUrlsHandler extends BaseHandler {
-  private readonly baseUrls = [
-    'https://developers.asana.com/docs/',
-    'https://developers.asana.com/reference/'
-  ];
-
   async handle(args: any): Promise<McpToolResponse> {
     if (!args.url || typeof args.url !== 'string') {
       throw new McpError(ErrorCode.InvalidParams, 'URL is required');
@@ -26,6 +21,9 @@ export class ExtractUrlsHandler extends BaseHandler {
     const page = await this.apiClient.browser.newPage();
 
     try {
+      const baseUrl = new URL(args.url);
+      const basePath = baseUrl.pathname.split('/').slice(0, 3).join('/'); // Get the base path (e.g., /3/ for Python docs)
+
       await page.goto(args.url, { waitUntil: 'networkidle' });
       const content = await page.content();
       const $ = cheerio.load(content);
@@ -36,7 +34,11 @@ export class ExtractUrlsHandler extends BaseHandler {
         if (href) {
           try {
             const url = new URL(href, args.url);
-            if (this.baseUrls.some(baseUrl => url.href.startsWith(baseUrl)) && !url.hash && !url.href.endsWith('#')) {
+            // Only include URLs from the same documentation section
+            if (url.hostname === baseUrl.hostname && 
+                url.pathname.startsWith(basePath) && 
+                !url.hash && 
+                !url.href.endsWith('#')) {
               urls.add(url.href);
             }
           } catch (e) {
