@@ -4,8 +4,9 @@ import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { AddDocumentationTool } from './add-documentation.js';
 import { ApiClient } from '../api-client.js';
+import { AddDocumentationHandler } from '../handlers/add-documentation.js';
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 
 // Get current directory in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -14,12 +15,17 @@ const QUEUE_FILE = path.join(__dirname, '..', '..', 'queue.txt');
 
 export class RunQueueTool extends BaseTool {
   private apiClient: ApiClient;
-  private addDocumentationTool: AddDocumentationTool;
+  private addDocHandler: AddDocumentationHandler;
 
   constructor(apiClient: ApiClient) {
     super();
     this.apiClient = apiClient;
-    this.addDocumentationTool = new AddDocumentationTool(apiClient);
+    // Create a temporary server instance just for the handler
+    const tempServer = new Server(
+      { name: 'temp', version: '0.0.0' },
+      { capabilities: { tools: {} } }
+    );
+    this.addDocHandler = new AddDocumentationHandler(tempServer, apiClient);
   }
 
   get definition(): ToolDefinition {
@@ -66,8 +72,8 @@ export class RunQueueTool extends BaseTool {
         const currentUrl = urls[0]; // Get first URL
         
         try {
-          // Process the URL
-          await this.addDocumentationTool.execute({ url: currentUrl });
+          // Process the URL using the handler
+          await this.addDocHandler.handle({ url: currentUrl });
           processedCount++;
         } catch (error) {
           failedCount++;
