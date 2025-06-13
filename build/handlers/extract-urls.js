@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { validateUrl } from '../utils/validation.js';
 // Get current directory in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,12 +14,14 @@ export class ExtractUrlsHandler extends BaseHandler {
         if (!args.url || typeof args.url !== 'string') {
             throw new McpError(ErrorCode.InvalidParams, 'URL is required');
         }
+        // Validate URL before processing
+        const validatedUrl = validateUrl(args.url);
         await this.apiClient.initBrowser();
         const page = await this.apiClient.browser.newPage();
         try {
-            const baseUrl = new URL(args.url);
+            const baseUrl = validatedUrl;
             const basePath = baseUrl.pathname.split('/').slice(0, 3).join('/'); // Get the base path (e.g., /3/ for Python docs)
-            await page.goto(args.url, { waitUntil: 'networkidle' });
+            await page.goto(validatedUrl.href, { waitUntil: 'networkidle' });
             const content = await page.content();
             const $ = cheerio.load(content);
             const urls = new Set();
@@ -26,7 +29,7 @@ export class ExtractUrlsHandler extends BaseHandler {
                 const href = $(element).attr('href');
                 if (href) {
                     try {
-                        const url = new URL(href, args.url);
+                        const url = new URL(href, validatedUrl.href);
                         // Only include URLs from the same documentation section
                         if (url.hostname === baseUrl.hostname &&
                             url.pathname.startsWith(basePath) &&

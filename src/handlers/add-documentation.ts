@@ -3,6 +3,7 @@ import { BaseHandler } from './base-handler.js';
 import { DocumentChunk, McpToolResponse } from '../types.js';
 import * as cheerio from 'cheerio';
 import crypto from 'crypto';
+import { validateUrl } from '../utils/validation.js';
 
 const COLLECTION_NAME = 'documentation';
 
@@ -12,8 +13,11 @@ export class AddDocumentationHandler extends BaseHandler {
       throw new McpError(ErrorCode.InvalidParams, 'URL is required');
     }
 
+    // Validate URL before processing
+    const validatedUrl = validateUrl(args.url);
+
     try {
-      const chunks = await this.fetchAndProcessUrl(args.url);
+      const chunks = await this.fetchAndProcessUrl(validatedUrl.href);
       
       // Batch process chunks for better performance
       const batchSize = 100;
