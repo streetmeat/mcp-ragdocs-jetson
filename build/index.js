@@ -8,6 +8,7 @@ class RagDocsServer {
     apiClient;
     handlerRegistry;
     constructor() {
+        console.error('[MCP] Initializing server...');
         this.server = new Server({
             name: 'mcp-ragdocs',
             version: '0.1.0',
@@ -16,13 +17,26 @@ class RagDocsServer {
                 tools: {},
             },
         });
-        this.apiClient = new ApiClient();
+        console.error('[MCP] Creating API client...');
+        try {
+            this.apiClient = new ApiClient();
+            console.error('[MCP] API client created successfully');
+        }
+        catch (error) {
+            console.error('[MCP] Failed to create API client:', error);
+            throw error;
+        }
+        console.error('[MCP] Registering handlers...');
         this.handlerRegistry = new HandlerRegistry(this.server, this.apiClient);
         // Error handling
         this.server.onerror = (error) => console.error('[MCP Error]', error);
         process.on('SIGINT', async () => {
             await this.cleanup();
             process.exit(0);
+        });
+        process.on('uncaughtException', (error) => {
+            console.error('[MCP] Uncaught exception:', error);
+            process.exit(1);
         });
     }
     async cleanup() {
