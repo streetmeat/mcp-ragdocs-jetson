@@ -1,4 +1,4 @@
-# RAG Documentation MCP Server Tweaked for the Nvidia Jetson Orin Nano Dev Kit
+# RAG Documentation MCP Server for the Nvidia Jetson Orin Nano Dev Kit
 
 An MCP server implementation that provides tools for retrieving and processing documentation through vector search, enabling AI assistants to augment their responses with relevant documentation context.
 
