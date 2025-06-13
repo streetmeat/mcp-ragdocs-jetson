@@ -38,7 +38,21 @@ export class ApiClient {
 
   async initBrowser() {
     if (!this.browser) {
-      this.browser = await chromium.launch();
+      try {
+        // Try default launch first
+        this.browser = await chromium.launch({
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+        });
+      } catch (error) {
+        // Fallback to system chromium if Playwright browser fails
+        console.error('Playwright browser launch failed, trying system chromium:', error);
+        this.browser = await chromium.launch({
+          executablePath: '/usr/bin/chromium-browser',
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
+        });
+      }
     }
   }
 
