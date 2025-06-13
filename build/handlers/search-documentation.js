@@ -1,15 +1,18 @@
 import { McpError, ErrorCode } from '@modelcontextprotocol/sdk/types.js';
 import { BaseHandler } from './base-handler.js';
 import { isDocumentPayload } from '../types.js';
+import { validateSearchQuery } from '../utils/validation.js';
 const COLLECTION_NAME = 'documentation';
 export class SearchDocumentationHandler extends BaseHandler {
     async handle(args) {
         if (!args.query || typeof args.query !== 'string') {
             throw new McpError(ErrorCode.InvalidParams, 'Query is required');
         }
+        // Validate and sanitize the search query
+        const sanitizedQuery = validateSearchQuery(args.query);
         const limit = args.limit || 5;
         try {
-            const queryEmbedding = await this.apiClient.getEmbeddings(args.query);
+            const queryEmbedding = await this.apiClient.getEmbeddings(sanitizedQuery);
             const searchResults = await this.apiClient.qdrantClient.search(COLLECTION_NAME, {
                 vector: queryEmbedding,
                 limit,

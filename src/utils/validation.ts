@@ -46,3 +46,52 @@ export function validateUrl(url: string): URL {
     );
   }
 }
+
+/**
+ * Sanitizes user input to prevent injection attacks
+ * @param input The input to sanitize
+ * @param maxLength Maximum allowed length
+ * @returns The sanitized input
+ */
+export function sanitizeInput(input: string, maxLength: number = 1000): string {
+  if (!input || typeof input !== 'string') {
+    return '';
+  }
+  
+  // Trim and limit length
+  let sanitized = input.trim().slice(0, maxLength);
+  
+  // Remove null bytes
+  sanitized = sanitized.replace(/\0/g, '');
+  
+  // Remove control characters except newlines and tabs
+  sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+  
+  return sanitized;
+}
+
+/**
+ * Validates a search query
+ * @param query The query to validate
+ * @returns The sanitized query
+ * @throws McpError if the query is invalid
+ */
+export function validateSearchQuery(query: string): string {
+  if (!query || typeof query !== 'string') {
+    throw new McpError(
+      ErrorCode.InvalidParams,
+      'Search query is required and must be a string'
+    );
+  }
+  
+  const sanitized = sanitizeInput(query, 500);
+  
+  if (sanitized.length === 0) {
+    throw new McpError(
+      ErrorCode.InvalidParams,
+      'Search query cannot be empty'
+    );
+  }
+  
+  return sanitized;
+}
