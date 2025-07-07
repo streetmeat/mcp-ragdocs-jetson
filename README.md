@@ -78,7 +78,7 @@ Add this to your `claude_desktop_config.json`:
       "command": "npx",
       "args": [
         "-y",
-        "@hannesrudolph/mcp-ragdocs"
+        "github:streetmeat/mcp-ragdocs-jetson"
       ],
       "env": {
         "OPENAI_API_KEY": "",
@@ -88,6 +88,7 @@ Add this to your `claude_desktop_config.json`:
     }
   }
 }
+
 ```
 
 You'll need to provide values for the following environment variables:
