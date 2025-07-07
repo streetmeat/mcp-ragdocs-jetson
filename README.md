@@ -56,6 +56,17 @@ The RAG Documentation tool is designed for:
 
 ## Configuration
 
+### Useage with Claude Code
+
+claude mcp add rag-docs \
+  npx \
+  -e OPENAI_API_KEY=$OPENAI_API_KEY \
+  -e QDRANT_URL=$QDRANT_URL \
+  -e QDRANT_API_KEY=$QDRANT_API_KEY \
+  -- \
+  -y github:streetmeat/mcp-ragdocs-jetson
+
+
 ### Usage with Claude Desktop
 
 Add this to your `claude_desktop_config.json`:
